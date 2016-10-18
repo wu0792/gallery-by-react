@@ -1,0 +1,38 @@
+/* Base Application Styles */
+body {
+  color: #fff;
+  background: #aaa;
+}
+
+.pic{
+  width: 100px;
+  height: 100px;
+  box-sizing: border-box;
+  border: solid 10px #fff;
+}
+
+.nav_root{
+  position: absolute;
+  bottom: 10px;
+  text-align: center;
+  width: 100%;
+}
+
+.nav_dot{
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  cursor: pointer;
+  background-color: #111;
+  margin: 5px;
+
+  &:hover{
+    background-color: #333;
+  }
+  &.active{
+    background-color: #abc;
+  }
+}
