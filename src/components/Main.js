@@ -30,11 +30,11 @@ class GalleryComponent extends React.Component {
 
   render() {
     return (
+      //将JSON对象的数组映射成Picture组件数组
+      //下面的映射过程，就是返回Picture组件，组件中定义的键值对就是该组件的props，注意其中的三个prop：
+      //1）key   2)ref     3)onClickIndex
       <section>
         <section id="picContainer">
-        //将JSON对象的数组映射成Picture组件数组
-        //下面的映射过程，就是返回Picture组件，组件中定义的键值对就是该组件的props，注意其中的三个prop：
-        //1）key   2)ref     3)onClickIndex
           {this.state.imageDatasArray.map((data, index) => (<Picture index={index} top={this.getPos(index).top} 
             left={this.getPos(index).left} width={this.state.const.PIC_WIDTH} height={this.state.const.PIC_HEIGHT}
             scale={this.state.const.ACTIVE_SCALE} isActive={index === this.state.activeIndex}
@@ -42,9 +42,6 @@ class GalleryComponent extends React.Component {
             onClickIndex={this.onClickIndex.bind(this)} desc={data.desc} />))}
         </section>
         <nav>
-            //导航组件的引用
-            //同样注意其中的两个props：
-            //1） ref    2)onClickIndex
             <Nav ref="nav" activeIndex={this.state.activeIndex} onClickIndex={this.onClickIndex.bind(this)} count={this.state.imageDatasArray.length} />
         </nav>
       </section>

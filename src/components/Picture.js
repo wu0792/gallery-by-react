@@ -71,9 +71,9 @@ class Picture extends React.Component {
   }
 
   render() {
+    //注意onClick的赋值
     return (
       <figure className={'pic' + (this.state.reverse?' reverse':'')} style={this.state.styleObject}>
-        //注意onClick的赋值
         <img style={this.getImgStyle()} onClick={this.onClickIndex.bind(this, this.props.index)} alt={this.state.title} src={this.state.imageUrl} ref="img" />
         <figcaption className="pic_reverse" onClick={this.onClickIndex.bind(this, this.props.index)}>
           <div className="title">{this.state.title}</div>
