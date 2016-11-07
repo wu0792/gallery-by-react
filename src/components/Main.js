@@ -1,8 +1,10 @@
 require('normalize.css/normalize.css');
 require('styles/App.less');
 
+//导入两个React基本对象
 import React from 'react';
 import ReactDOM from 'react-dom';
+//导入自定义的组件对象
 import Picture from './Picture';
 import Nav from './Nav';
 
@@ -22,45 +24,59 @@ class GalleryComponent extends React.Component {
     this.state.size = {};
     this.state.activeIndex = 0;
     this.state.imageDatasArray = imageDatas;
+    //常量的定义
     this.state.const = {NAV_HEIGHT: 30, PIC_WIDTH : 200, PIC_HEIGHT : 200, ACTIVE_SCALE : 1.8};
   }
 
   render() {
-    // debugger;
     return (
       <section>
         <section id="picContainer">
-          {this.state.imageDatasArray.map((data, index) => (<Picture index={index} top={this.getPos(index).top} left={this.getPos(index).left} width={this.state.const.PIC_WIDTH} height={this.state.const.PIC_HEIGHT}
+        //将JSON对象的数组映射成Picture组件数组
+        //下面的映射过程，就是返回Picture组件，组件中定义的键值对就是该组件的props，注意其中的三个prop：
+        //1）key   2)ref     3)onClickIndex
+          {this.state.imageDatasArray.map((data, index) => (<Picture index={index} top={this.getPos(index).top} 
+            left={this.getPos(index).left} width={this.state.const.PIC_WIDTH} height={this.state.const.PIC_HEIGHT}
             scale={this.state.const.ACTIVE_SCALE} isActive={index === this.state.activeIndex}
             ref={this.getPicRefName(index)} key={index} imageUrl={data.imageUrl} title={data.title}
             onClickIndex={this.onClickIndex.bind(this)} desc={data.desc} />))}
         </section>
         <nav>
+            //导航组件的引用
+            //同样注意其中的两个props：
+            //1） ref    2)onClickIndex
             <Nav ref="nav" activeIndex={this.state.activeIndex} onClickIndex={this.onClickIndex.bind(this)} count={this.state.imageDatasArray.length} />
         </nav>
       </section>
     );
   }
 
+  //ES6格式的function定义：根据index获取对应Picture组件的ref属性
   getPicRefName(index){
+    //ES6特性，类似String.Format
     return `pic-${index}`;
   }
 
+  //根据图片的index获取对应的坐标值，主要是根据两个因素：
+  //1）是否是激活状态的图片，如果是，则返回居中的坐标值
+  //2）如果不是激活状态，则根据index的大小判断其左右位置，再返回随机数
   getPos(index){
+    //获取整个body对象的宽高
     let bodyWidth = this.state.size.width || ( this.state.size.width = document.body.scrollWidth),
         bodyHeight = (this.state.size.height || (this.state.size.height = document.body.scrollHeight)) - this.state.const.NAV_HEIGHT;
 
+    //获取Picture对象的宽高
     let minLeft = 0,
         minTop = 0,
         picWidth = this.state.const.PIC_WIDTH,
         picHeight = this.state.const.PIC_HEIGHT,
         maxTop = bodyHeight - picHeight;
 
-        // debugger;
+    //1）如果是激活状态的图片
     if(this.state.activeIndex == index){
       return {left: bodyWidth/2 - picWidth*this.state.const.ACTIVE_SCALE/2, top: bodyHeight/2 - picHeight*this.state.const.ACTIVE_SCALE/2};
     }else{
-      //分为左中右三块区域，中间呈现当前激活的图片，左右呈现非激活的图片
+      //2）如果不是激活状态的图片，分为左中右三块区域，中间呈现当前激活的图片，左右呈现非激活的图片
       let inLeft = index < this.state.imageDatasArray.length/2,
           left = inLeft ? (Math.random() * (bodyWidth/2 - picWidth * 1.5)) : (bodyWidth/2 + picWidth/2 + Math.random() * (bodyWidth/2 - picWidth * 1.5)),
           top = minTop + Math.random() * (maxTop - minTop);
@@ -69,6 +85,7 @@ class GalleryComponent extends React.Component {
     }
   }
 
+  //当单击图片或单击导航时候调用
   onClickIndex(index){
     if(this.state.activeIndex !== index){
       this.state.activeIndex = index;
@@ -80,6 +97,7 @@ class GalleryComponent extends React.Component {
           img.state.isActive = img.props.index === index;
           img.state.reverse = false;
 
+          //setState方法用来通知组件进行状态更新，重新render
           img.setState({styleObject: img.getFigureStyle()});
       });
     }else{
@@ -92,5 +110,6 @@ class GalleryComponent extends React.Component {
   }
 };
 
+//将整个组件呈现到HTML的#app元素内部
 ReactDOM.render(<GalleryComponent />, document.getElementById('app'));
 export default GalleryComponent;

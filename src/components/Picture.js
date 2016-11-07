@@ -11,7 +11,7 @@ class Picture extends React.Component {
   constructor(props) {
     super(props);
     
-    // debugger;
+    //根据组件定义的props赋值，传递给state，因为只有state的更新才会触发组件render
     this.state = {};
     this.state.reverse = props.reverse || false;
     this.state.imageUrl = props.imageUrl;
@@ -28,6 +28,7 @@ class Picture extends React.Component {
   }
 
   onClickIndex(index) {
+    //此处回调父组件中的function
     this.props.onClickIndex(index);
   }
 
@@ -49,12 +50,14 @@ class Picture extends React.Component {
 
     // 如果图片的旋转角度有值并且不为0， 添加旋转角度
     if (!this.state.isActive && this.state.rotate) {
+      //添加浏览器兼容性CSS
       (['MozTransform', 'msTransform', 'WebkitTransform', 'transform']).forEach(function (value) {
         styleObject[value] = 'rotate(' + this.state.rotate + 'deg)';
       }.bind(this));
     }
 
     if(this.state.isActive){
+      //注意驼峰式的方式，而不是 z-index
       styleObject['zIndex'] = 100;
     }
 
@@ -63,12 +66,14 @@ class Picture extends React.Component {
 
   getImgStyle(){
     let figureStyle = this.getFigureStyle();
+    //减掉边框的宽度
     return {width: figureStyle.width - 20, height: figureStyle.height - 20};
   }
 
   render() {
     return (
       <figure className={'pic' + (this.state.reverse?' reverse':'')} style={this.state.styleObject}>
+        //注意onClick的赋值
         <img style={this.getImgStyle()} onClick={this.onClickIndex.bind(this, this.props.index)} alt={this.state.title} src={this.state.imageUrl} ref="img" />
         <figcaption className="pic_reverse" onClick={this.onClickIndex.bind(this, this.props.index)}>
           <div className="title">{this.state.title}</div>
